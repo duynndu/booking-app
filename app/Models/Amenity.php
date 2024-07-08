@@ -4,22 +4,19 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class RoomType extends Model
+class Amenity extends Model
 {
     use HasFactory;
 
     protected $fillable = [
         'name',
         'description',
-        'price',
     ];
 
-    public function rooms(): HasMany
+    public function rooms(): BelongsToMany
     {
-        return $this->hasMany(Room::class);
+        return $this->belongsToMany(Room::class, 'room_amenities');
     }
 }
