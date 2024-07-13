@@ -1,5 +1,7 @@
 <?php
 
+use App\Models\Amenity;
+use App\Models\Room;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -13,12 +15,8 @@ return new class extends Migration
     {
         Schema::create('room_amenities', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('room_id');
-            $table->unsignedBigInteger('amenity_id');
-            $table->timestamps();
-
-            $table->foreign('room_id')->references('id')->on('rooms');
-            $table->foreign('amenity_id')->references('id')->on('amenities');
+            $table->foreignIdFor(Room::class)->constrained();
+            $table->foreignIdFor(Amenity::class)->constrained();
         });
     }
 

@@ -2,9 +2,11 @@
 
 use App\Http\Controllers\BannerController;
 use App\Http\Controllers\BookingController;
+use App\Http\Controllers\MoMoController;
 use App\Http\Controllers\PromotionController;
 use App\Http\Controllers\RoomController;
 use App\Http\Controllers\RoomTypeController;
+use App\Http\Controllers\WebhookController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
@@ -32,3 +34,7 @@ Route::apiResource('banners', BannerController::class);
 Route::apiResource('promotions', PromotionController::class);
 Route::apiResource('bookings', BookingController::class);
 Route::patch('bookings/{id}/mark-as-paid', [BookingController::class, 'markAsPaid']);
+
+Route::post('webhook-event-handler', [WebhookController::class, 'handleWebhookEvent']);
+
+Route::post('momo/create-payment', [MoMoController::class,'createPayment']);

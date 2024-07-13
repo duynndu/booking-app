@@ -44,6 +44,7 @@ class AuthController extends Controller
         return response()->json([
             'Id' => $user->id,
             'Name' => $user->name,
+            'Phone' => $user->phone,
             'Email' => $user->email,
             'Email_verified_at' => $user->email_verified_at,
             'JwtToken' => $token,
@@ -59,12 +60,14 @@ class AuthController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:255',
+            'phone' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:6',
         ]);
 
         $user = User::create([
             'name' => $request->name,
+            'phone' => $request->phone,
             'email' => $request->email,
             'password' => Hash::make($request->password),
         ]);
