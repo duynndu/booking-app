@@ -1,5 +1,9 @@
 <?php
 
+use App\Mail\MyEmail;
+use App\Mail\OrderShipped;
+use App\Models\Room;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -16,3 +20,9 @@ use Illuminate\Support\Facades\Route;
 //Route::get('/', function () {
 //    return response()->json(['hello' => 'world']);
 //});
+Route::get('/', function () {
+    $room = Room::where('id', 16)->with('images')->first();
+//    dd($room->toArray());
+    $room->roomType->name;
+    return view('welcome');
+});

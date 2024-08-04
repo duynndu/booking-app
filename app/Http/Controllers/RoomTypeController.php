@@ -1,5 +1,4 @@
 <?php
-// app/Http/Controllers/Api/RoomTypeController.php
 
 namespace App\Http\Controllers;
 
@@ -12,7 +11,7 @@ class RoomTypeController extends Controller
     public function index()
     {
         $roomTypes = RoomType::all();
-        return response()->json($this->convertKeys($roomTypes));
+        return response()->json($roomTypes);
     }
 
     public function store(Request $request)
@@ -32,7 +31,7 @@ class RoomTypeController extends Controller
         if (!$roomType) {
             return response()->json(['error' => 'Room type not found'], 404);
         }
-        return response()->json($this->convertKeys($roomType));
+        return response()->json($roomType);
     }
 
     public function update(Request $request, $id)
@@ -48,7 +47,7 @@ class RoomTypeController extends Controller
         ]);
 
         $roomType->update($request->all());
-        return response()->json($this->convertKeys($roomType));
+        return response()->json($roomType);
     }
 
     public function destroy($id)

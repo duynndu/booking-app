@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
 
 class Room extends Model
 {
@@ -15,15 +16,12 @@ class Room extends Model
     protected $fillable = [
         'room_type_id',
         'area',
+        'status',
         'room_number',
         'max_adults',
         'max_children',
         'price',
         'max_occupancy_points',
-    ];
-
-    protected $casts = [
-        'images' => 'array',
     ];
 
     public function roomType(): BelongsTo
@@ -40,5 +38,10 @@ class Room extends Model
     public function bookings(): HasMany
     {
         return $this->hasMany(Booking::class);
+    }
+
+    public function images()
+    {
+        return $this->morphMany(Image::class, 'imageable');
     }
 }

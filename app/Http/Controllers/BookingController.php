@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Booking;
@@ -11,7 +12,7 @@ class BookingController extends Controller
 {
     public function index()
     {
-        $bookings = Booking::with('room', 'user')->get();
+        $bookings = Booking::with(['room', 'user'])->get();
         return response()->json($bookings);
     }
 

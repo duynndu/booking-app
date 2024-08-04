@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Auth;
 use PHPOpenSourceSaver\JWTAuth\Contracts\JWTSubject;
 
 class User extends Authenticatable implements JWTSubject
@@ -68,5 +69,16 @@ class User extends Authenticatable implements JWTSubject
     public function RefreshTokens(): HasMany
     {
         return $this->hasMany(RefreshToken::class);
+    }
+
+    public function hasAnyRole($roles)
+    {
+        foreach ($roles as $role) {
+            if (Auth::user()->role == $role) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

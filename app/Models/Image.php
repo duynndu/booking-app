@@ -4,20 +4,18 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
 
-class Banner extends Model
+class Image extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'title',
-        'description',
-        'status',
-        'is_active',
+        'url',
     ];
 
-    public function images()
+    public function imageable()
     {
-        return $this->morphMany(Image::class, 'imageable');
+        return $this->morphTo();
     }
 }

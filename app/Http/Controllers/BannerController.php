@@ -2,40 +2,44 @@
 
 namespace App\Http\Controllers;
 
+use App\Traits\HandleImage;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Banner;
 
 class BannerController extends Controller
 {
+    use HandleImage;
+
     public function __construct()
     {
-        $this->middleware('auth:api');
+//        $this->middleware('auth:api');
     }
 
     public function index()
     {
-        $banners = Banner::all();
+        $banners = Banner::with(['images'])->get();
         return response()->json($banners);
     }
 
 
     public function store(Request $request)
     {
-        $request->validate([
-            'image' => 'required|string',
-            'title' => 'required|string',
-            'description' => 'required|string',
+        $existingDefaultBanner = Banner::where('status', 'draft')->with(['images'])->first();
+        if ($existingDefaultBanner) {
+            return response()->json($existingDefaultBanner);
+        }
+        $defaultBanner = new Banner([
+            'status' => 'draft',
         ]);
-
-        $banner = Banner::create($request->all());
-        return response()->json($banner, 201);
+        $defaultBanner->save();
+        return response()->json($defaultBanner);
     }
 
 
     public function show($id)
     {
-        $banner = Banner::find($id);
+        $banner = Banner::with(['images'])->find($id);
         if (!$banner) {
             return response()->json(['error' => 'Banner not found'], 404);
         }
@@ -50,12 +54,13 @@ class BannerController extends Controller
         }
 
         $request->validate([
-            'image' => 'required|string',
             'title' => 'required|string',
             'description' => 'required|string',
         ]);
-
-        $banner->update($request->all());
+        $banner->title = $request->input('title');
+        $banner->description = $request->input('description');
+        $banner->status = 'published';
+        $banner->save();
         return response()->json($banner);
     }
 
@@ -66,7 +71,24 @@ class BannerController extends Controller
             return response()->json(['error' => 'Banner not found'], 404);
         }
 
+        $this->deleteImages($banner->images);
+
         $banner->delete();
+
         return response()->json(['message' => 'Banner deleted successfully']);
+    }
+
+    public function getBannerActive()
+    {
+        $banner = Banner::where('is_active', 1)->with(['images'])->first();
+        if (!$banner) {
+            return response()->json(['error' => 'Banner không tồn tại'], 404);
+        }
+        return response()->json($banner);
+    }
+
+    public function uploadImageBanner(Banner $id, Request $request)
+    {
+        return $this->uploadImage($id, $request);
     }
 }

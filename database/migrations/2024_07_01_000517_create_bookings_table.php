@@ -14,14 +14,16 @@ return new class extends Migration
         Schema::create('bookings', function (Blueprint $table) {
             $table->id();
             $table->foreignId('room_id')->constrained()->onDelete('cascade');
-            $table->foreignId('user_id')->constrained()->onDelete('cascade')->nullable();
+            $table->foreignId('user_id')->nullable();
             $table->string('name');
             $table->string('email');
             $table->string('phone');
             $table->date('checkin_date');
             $table->date('checkout_date');
-            $table->integer('total_price');
+            $table->decimal('total_price', 10, 2);
             $table->boolean('is_paid')->default(false);
+            $table->enum('payment_method', ['paypal', 'momo', 'cash'])->nullable();
+            $table->string('payment_transaction_id')->nullable();
             $table->timestamps();
         });
     }

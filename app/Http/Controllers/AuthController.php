@@ -25,7 +25,7 @@ class AuthController extends Controller
         ]);
         $credentials = $request->only('email', 'password');
         // tạo jwt token 1 phút
-        $token = auth()->setTTL(1)->attempt($credentials);
+        $token = auth()->setTTL(20)->attempt($credentials);
         if (!$token) {
             return response()->json([
                 'status' => 'error',
